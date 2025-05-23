@@ -1,473 +1,404 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Global Time Zone App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Advanced Calculator App
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+   body {
+      font-family: 'Roboto Mono', monospace;
+    }
+    /* Custom scrollbar for results */
+    #history {
+      scrollbar-width: thin;
+      scrollbar-color: #a0aec0 #edf2f7;
+    }
+    #history::-webkit-scrollbar {
+      width: 6px;
+    }
+    #history::-webkit-scrollbar-track {
+      background: #edf2f7;
+      border-radius: 3px;
+    }
+    #history::-webkit-scrollbar-thumb {
+      background-color: #a0aec0;
+      border-radius: 3px;
     }
   </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
-  <header class="bg-white dark:bg-gray-800 shadow p-4 flex items-center justify-between sticky top-0 z-20">
-    <h1 class="text-2xl font-semibold flex items-center space-x-2">
-      <i class="fas fa-globe-americas text-blue-600 dark:text-blue-400"></i>
-      <span>Global Time Zone</span>
+ </head>
+ <body class="bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600 min-h-screen flex items-center justify-center p-4">
+  <main aria-label="Advanced calculator application" class="bg-white bg-opacity-90 backdrop-blur-md rounded-3xl shadow-2xl max-w-md w-full flex flex-col" role="main">
+   <header class="p-6 border-b border-gray-300 flex flex-col items-center">
+    <img alt="Icon of a calculator with digital display and buttons" class="mb-3 rounded-full shadow-md" height="80" loading="lazy" src="https://storage.googleapis.com/a1aa/image/5b24fe84-155e-4563-177e-55c8835cf082.jpg" width="80"/>
+    <h1 class="text-3xl font-extrabold text-indigo-900 select-none">
+     Advanced Calculator
     </h1>
-    <button
-      id="toggleDarkMode"
-      aria-label="Toggle Dark Mode"
-      class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
-    >
-      <i class="fas fa-moon"></i>
-    </button>
-  </header>
-
-  <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-6 flex flex-col">
-    <section class="mb-6">
-      <label for="searchCity" class="block mb-2 font-semibold text-lg">Add a city or location</label>
-      <div class="relative">
-        <input
-          type="text"
-          id="searchCity"
-          placeholder="Search for a city or country"
-          class="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          autocomplete="off"
-          aria-autocomplete="list"
-          aria-controls="searchResults"
-          aria-expanded="false"
-          aria-haspopup="listbox"
-        />
-        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"></i>
-        <ul
-          id="searchResults"
-          role="listbox"
-          class="absolute z-30 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md max-h-60 overflow-y-auto mt-1 hidden"
-          tabindex="-1"
-        ></ul>
-      </div>
-    </section>
-
-    <section class="mb-6 flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Your Clocks</h2>
-      <div class="flex items-center space-x-4">
-        <label for="timeFormat" class="font-medium">Time Format:</label>
-        <select
-          id="timeFormat"
-          class="rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 py-1 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          aria-label="Select time format"
-        >
-          <option value="24">24-hour</option>
-          <option value="12">12-hour (AM/PM)</option>
-        </select>
-      </div>
-    </section>
-
-    <section id="clocksList" class="space-y-4 overflow-y-auto max-h-[60vh]">
-      <!-- Clocks will be dynamically inserted here -->
-    </section>
+    <p class="text-indigo-700 mt-1 text-sm font-medium select-none">
+     Scientific &amp; Financial Calculator with History &amp; Memory
+    </p>
+   </header>
+   <section class="p-6 flex flex-col space-y-4">
+    <div aria-atomic="true" aria-live="polite" class="bg-gray-100 rounded-xl p-4 min-h-[4.5rem] text-right text-3xl font-semibold text-gray-900 break-words select-text" id="display">
+     0
+    </div>
+    <div aria-label="Current expression" class="text-right text-gray-500 text-sm min-h-[1.5rem] font-mono select-text" id="subDisplay">
+    </div>
+    <div class="flex justify-between items-center space-x-2">
+     <button aria-label="Clear all" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg py-2 shadow-md focus:outline-none focus:ring-4 focus:ring-red-300 transition" id="clear">
+      AC
+     </button>
+     <button aria-label="Backspace" class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg py-2 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300 transition" id="backspace">
+      <i class="fas fa-backspace">
+      </i>
+     </button>
+     <button aria-label="Memory recall" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white font-bold rounded-lg py-2 shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 transition" id="memoryRecall">
+      MR
+     </button>
+     <button aria-label="Memory clear" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white font-bold rounded-lg py-2 shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 transition" id="memoryClear">
+      MC
+     </button>
+     <button aria-label="Memory add" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white font-bold rounded-lg py-2 shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 transition" id="memoryAdd">
+      M+
+     </button>
+    </div>
+    <div aria-label="Calculator buttons" class="grid grid-cols-5 gap-3 text-gray-900 font-semibold text-lg select-none" role="group">
+     <button aria-label="Sine function" class="py-3 rounded-lg bg-gradient-to-tr from-indigo-300 to-indigo-400 hover:from-indigo-400 hover:to-indigo-500 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="sin(" type="button">
+      sin
+     </button>
+     <button aria-label="Cosine function" class="py-3 rounded-lg bg-gradient-to-tr from-indigo-300 to-indigo-400 hover:from-indigo-400 hover:to-indigo-500 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="cos(" type="button">
+      cos
+     </button>
+     <button aria-label="Tangent function" class="py-3 rounded-lg bg-gradient-to-tr from-indigo-300 to-indigo-400 hover:from-indigo-400 hover:to-indigo-500 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="tan(" type="button">
+      tan
+     </button>
+     <button aria-label="Log base 10 function" class="py-3 rounded-lg bg-gradient-to-tr from-indigo-300 to-indigo-400 hover:from-indigo-400 hover:to-indigo-500 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="log10(" type="button">
+      log
+     </button>
+     <button aria-label="Natural logarithm function" class="py-3 rounded-lg bg-gradient-to-tr from-indigo-300 to-indigo-400 hover:from-indigo-400 hover:to-indigo-500 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="ln(" type="button">
+      ln
+     </button>
+     <button aria-label="Open parenthesis" class="py-3 rounded-lg bg-gray-200 hover:bg-gray-300 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="parenthesis" data-value="(" type="button">
+      (
+     </button>
+     <button aria-label="Close parenthesis" class="py-3 rounded-lg bg-gray-200 hover:bg-gray-300 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="parenthesis" data-value=")" type="button">
+      )
+     </button>
+     <button aria-label="Exponentiation" class="py-3 rounded-lg bg-yellow-300 hover:bg-yellow-400 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300" data-action="operator" data-value="^" type="button">
+      ^
+     </button>
+     <button aria-label="Divide" class="py-3 rounded-lg bg-yellow-300 hover:bg-yellow-400 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300" data-action="operator" data-value="/" type="button">
+      ÷
+     </button>
+     <button aria-label="Multiply" class="py-3 rounded-lg bg-yellow-300 hover:bg-yellow-400 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300" data-action="operator" data-value="*" type="button">
+      ×
+     </button>
+     <button aria-label="Number seven" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="7" type="button">
+      7
+     </button>
+     <button aria-label="Number eight" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="8" type="button">
+      8
+     </button>
+     <button aria-label="Number nine" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="9" type="button">
+      9
+     </button>
+     <button aria-label="Subtract" class="py-3 rounded-lg bg-yellow-300 hover:bg-yellow-400 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300" data-action="operator" data-value="-" type="button">
+      −
+     </button>
+     <button aria-label="Add" class="py-3 rounded-lg bg-yellow-300 hover:bg-yellow-400 shadow-md focus:outline-none focus:ring-4 focus:ring-yellow-300" data-action="operator" data-value="+" type="button">
+      +
+     </button>
+     <button aria-label="Number four" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="4" type="button">
+      4
+     </button>
+     <button aria-label="Number five" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="5" type="button">
+      5
+     </button>
+     <button aria-label="Number six" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="6" type="button">
+      6
+     </button>
+     <button aria-label="Square root function" class="py-3 rounded-lg bg-indigo-300 hover:bg-indigo-400 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="sqrt(" type="button">
+      √
+     </button>
+     <button aria-label="Calculate result" class="py-3 rounded-lg bg-green-500 hover:bg-green-600 text-white shadow-md focus:outline-none focus:ring-4 focus:ring-green-300" id="equals" type="button">
+      =
+     </button>
+     <button aria-label="Number one" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="1" type="button">
+      1
+     </button>
+     <button aria-label="Number two" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="2" type="button">
+      2
+     </button>
+     <button aria-label="Number three" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="3" type="button">
+      3
+     </button>
+     <button aria-label="Absolute value function" class="py-3 rounded-lg bg-indigo-300 hover:bg-indigo-400 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="abs(" type="button">
+      |x|
+     </button>
+     <button aria-label="Clear entry" class="py-3 rounded-lg bg-red-400 hover:bg-red-500 text-white shadow-md focus:outline-none focus:ring-4 focus:ring-red-300" id="clearEntry" type="button">
+      CE
+     </button>
+     <button aria-label="Number zero" class="col-span-2 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="number" data-value="0" type="button">
+      0
+     </button>
+     <button aria-label="Decimal point" class="py-3 rounded-lg bg-gray-100 hover:bg-gray-200 shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300" data-action="decimal" data-value="." type="button">
+      .
+     </button>
+     <button aria-label="Pi constant" class="py-3 rounded-lg bg-indigo-300 hover:bg-indigo-400 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="pi" type="button">
+      π
+     </button>
+     <button aria-label="Euler's number constant" class="py-3 rounded-lg bg-indigo-300 hover:bg-indigo-400 shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-300" data-action="function" data-value="e" type="button">
+      e
+     </button>
+    </div>
+   </section>
+   <section aria-label="Calculation history" class="p-6 border-t border-gray-300 max-h-48 overflow-y-auto bg-gray-50 rounded-b-3xl" id="historySection">
+    <h2 class="text-indigo-900 font-bold mb-2 text-lg select-none">
+     History
+    </h2>
+    <ul class="space-y-1 text-gray-700 font-mono text-sm" id="history">
+    </ul>
+   </section>
   </main>
-
-  <footer class="bg-white dark:bg-gray-800 shadow-inner p-4 text-center text-sm text-gray-600 dark:text-gray-400">
-    &copy; 2024 Global Time Zone App
-  </footer>
-
   <script>
-    // List of cities with their IANA time zone identifiers and country flags (emoji)
-    // This list is a sample of 50 cities worldwide for demonstration and search.
-    const cities = [
-      { name: "New York, USA", timezone: "America/New_York", flag: "🇺🇸" },
-      { name: "Los Angeles, USA", timezone: "America/Los_Angeles", flag: "🇺🇸" },
-      { name: "Chicago, USA", timezone: "America/Chicago", flag: "🇺🇸" },
-      { name: "London, UK", timezone: "Europe/London", flag: "🇬🇧" },
-      { name: "Paris, France", timezone: "Europe/Paris", flag: "🇫🇷" },
-      { name: "Berlin, Germany", timezone: "Europe/Berlin", flag: "🇩🇪" },
-      { name: "Moscow, Russia", timezone: "Europe/Moscow", flag: "🇷🇺" },
-      { name: "Tokyo, Japan", timezone: "Asia/Tokyo", flag: "🇯🇵" },
-      { name: "Seoul, South Korea", timezone: "Asia/Seoul", flag: "🇰🇷" },
-      { name: "Beijing, China", timezone: "Asia/Shanghai", flag: "🇨🇳" },
-      { name: "Sydney, Australia", timezone: "Australia/Sydney", flag: "🇦🇺" },
-      { name: "Melbourne, Australia", timezone: "Australia/Melbourne", flag: "🇦🇺" },
-      { name: "Delhi, India", timezone: "Asia/Kolkata", flag: "🇮🇳" },
-      { name: "Mumbai, India", timezone: "Asia/Kolkata", flag: "🇮🇳" },
-      { name: "Dubai, UAE", timezone: "Asia/Dubai", flag: "🇦🇪" },
-      { name: "Cairo, Egypt", timezone: "Africa/Cairo", flag: "🇪🇬" },
-      { name: "Johannesburg, South Africa", timezone: "Africa/Johannesburg", flag: "🇿🇦" },
-      { name: "São Paulo, Brazil", timezone: "America/Sao_Paulo", flag: "🇧🇷" },
-      { name: "Buenos Aires, Argentina", timezone: "America/Argentina/Buenos_Aires", flag: "🇦🇷" },
-      { name: "Mexico City, Mexico", timezone: "America/Mexico_City", flag: "🇲🇽" },
-      { name: "Toronto, Canada", timezone: "America/Toronto", flag: "🇨🇦" },
-      { name: "Vancouver, Canada", timezone: "America/Vancouver", flag: "🇨🇦" },
-      { name: "Singapore, Singapore", timezone: "Asia/Singapore", flag: "🇸🇬" },
-      { name: "Bangkok, Thailand", timezone: "Asia/Bangkok", flag: "🇹🇭" },
-      { name: "Istanbul, Turkey", timezone: "Europe/Istanbul", flag: "🇹🇷" },
-      { name: "Rome, Italy", timezone: "Europe/Rome", flag: "🇮🇹" },
-      { name: "Madrid, Spain", timezone: "Europe/Madrid", flag: "🇪🇸" },
-      { name: "Amsterdam, Netherlands", timezone: "Europe/Amsterdam", flag: "🇳🇱" },
-      { name: "Zurich, Switzerland", timezone: "Europe/Zurich", flag: "🇨🇭" },
-      { name: "Lisbon, Portugal", timezone: "Europe/Lisbon", flag: "🇵🇹" },
-      { name: "Helsinki, Finland", timezone: "Europe/Helsinki", flag: "🇫🇮" },
-      { name: "Oslo, Norway", timezone: "Europe/Oslo", flag: "🇳🇴" },
-      { name: "Stockholm, Sweden", timezone: "Europe/Stockholm", flag: "🇸🇪" },
-      { name: "Warsaw, Poland", timezone: "Europe/Warsaw", flag: "🇵🇱" },
-      { name: "Athens, Greece", timezone: "Europe/Athens", flag: "🇬🇷" },
-      { name: "Kuala Lumpur, Malaysia", timezone: "Asia/Kuala_Lumpur", flag: "🇲🇾" },
-      { name: "Jakarta, Indonesia", timezone: "Asia/Jakarta", flag: "🇮🇩" },
-      { name: "Lagos, Nigeria", timezone: "Africa/Lagos", flag: "🇳🇬" },
-      { name: "Nairobi, Kenya", timezone: "Africa/Nairobi", flag: "🇰🇪" },
-      { name: "Honolulu, USA", timezone: "Pacific/Honolulu", flag: "🇺🇸" },
-      { name: "Anchorage, USA", timezone: "America/Anchorage", flag: "🇺🇸" },
-      { name: "Reykjavik, Iceland", timezone: "Atlantic/Reykjavik", flag: "🇮🇸" },
-      { name: "Auckland, New Zealand", timezone: "Pacific/Auckland", flag: "🇳🇿" },
-      { name: "Buenos Aires, Argentina", timezone: "America/Argentina/Buenos_Aires", flag: "🇦🇷" },
-      { name: "Caracas, Venezuela", timezone: "America/Caracas", flag: "🇻🇪" },
-      { name: "Tehran, Iran", timezone: "Asia/Tehran", flag: "🇮🇷" },
-      { name: "Baghdad, Iraq", timezone: "Asia/Baghdad", flag: "🇮🇶" },
-      { name: "Riyadh, Saudi Arabia", timezone: "Asia/Riyadh", flag: "🇸🇦" },
-      { name: "Hanoi, Vietnam", timezone: "Asia/Ho_Chi_Minh", flag: "🇻🇳" },
-      { name: "Manila, Philippines", timezone: "Asia/Manila", flag: "🇵🇭" },
-      { name: "Lima, Peru", timezone: "America/Lima", flag: "🇵🇪" }
-    ];
+   (() => {
+      const display = document.getElementById('display');
+      const subDisplay = document.getElementById('subDisplay');
+      const historyList = document.getElementById('history');
+      const buttons = document.querySelectorAll('button[data-action]');
+      const clearBtn = document.getElementById('clear');
+      const clearEntryBtn = document.getElementById('clearEntry');
+      const backspaceBtn = document.getElementById('backspace');
+      const equalsBtn = document.getElementById('equals');
+      const memoryRecallBtn = document.getElementById('memoryRecall');
+      const memoryClearBtn = document.getElementById('memoryClear');
+      const memoryAddBtn = document.getElementById('memoryAdd');
 
-    // Utility: debounce function for search input
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    }
+      let expression = '';
+      let memory = 0;
+      let lastResult = null;
 
-    // Store user clocks in localStorage
-    const STORAGE_KEY = "global-timezone-clocks";
-    const FORMAT_KEY = "global-timezone-timeformat";
-
-    // Load saved clocks or default to current location
-    let clocks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    let timeFormat = localStorage.getItem(FORMAT_KEY) || "24";
-
-    // Detect user's current timezone and add if no clocks saved
-    if (clocks.length === 0) {
-      const userTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const userCity = cities.find((c) => c.timezone === userTZ);
-      if (userCity) {
-        clocks.push(userCity);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(clocks));
-      } else {
-        // fallback if user's timezone not in list
-        clocks.push({ name: userTZ, timezone: userTZ, flag: "🌐" });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(clocks));
+      // Helper: sanitize expression for display
+      function sanitizeForDisplay(expr) {
+        return expr
+          .replace(/\*/g, '×')
+          .replace(/\//g, '÷')
+          .replace(/\^/g, '^')
+          .replace(/Math\.PI/g, 'π')
+          .replace(/Math\.E/g, 'e');
       }
-    }
 
-    // Elements
-    const searchInput = document.getElementById("searchCity");
-    const searchResults = document.getElementById("searchResults");
-    const clocksList = document.getElementById("clocksList");
-    const timeFormatSelect = document.getElementById("timeFormat");
-    const toggleDarkModeBtn = document.getElementById("toggleDarkMode");
-
-    // Initialize time format select
-    timeFormatSelect.value = timeFormat;
-
-    // Dark mode toggle
-    function setDarkMode(enabled) {
-      if (enabled) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("global-timezone-darkmode", "true");
-        toggleDarkModeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("global-timezone-darkmode", "false");
-        toggleDarkModeBtn.innerHTML = '<i class="fas fa-moon"></i>';
-      }
-    }
-    // Load dark mode preference
-    const darkModePref = localStorage.getItem("global-timezone-darkmode");
-    if (darkModePref === "true") {
-      setDarkMode(true);
-    } else {
-      setDarkMode(false);
-    }
-    toggleDarkModeBtn.addEventListener("click", () => {
-      setDarkMode(!document.documentElement.classList.contains("dark"));
-    });
-
-    // Format date and time for a given timezone and format
-    function formatDateTime(date, timezone, format24) {
-      const optionsDate = { year: "numeric", month: "short", day: "numeric", timeZone: timezone };
-      const optionsTime = {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: !format24,
-        timeZone: timezone,
-      };
-      const dateStr = new Intl.DateTimeFormat(undefined, optionsDate).format(date);
-      const timeStr = new Intl.DateTimeFormat(undefined, optionsTime).format(date);
-      return { dateStr, timeStr };
-    }
-
-    // Render clocks list
-    function renderClocks() {
-      clocksList.innerHTML = "";
-      clocks.forEach((city, index) => {
-        const clockId = `clock-${index}`;
-        const container = document.createElement("article");
-        container.setAttribute("draggable", "true");
-        container.setAttribute("aria-label", `Clock for ${city.name}`);
-        container.className =
-          "bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex items-center justify-between space-x-4 cursor-move select-none";
-
-        // Left: Flag and city name
-        const leftDiv = document.createElement("div");
-        leftDiv.className = "flex items-center space-x-3 min-w-0";
-
-        const flagSpan = document.createElement("span");
-        flagSpan.className = "text-3xl select-text";
-        flagSpan.textContent = city.flag;
-
-        const cityName = document.createElement("h3");
-        cityName.className = "font-semibold text-lg truncate select-text";
-        cityName.textContent = city.name;
-
-        leftDiv.appendChild(flagSpan);
-        leftDiv.appendChild(cityName);
-
-        // Middle: Date and time
-        const middleDiv = document.createElement("div");
-        middleDiv.className = "flex flex-col items-end min-w-[120px]";
-
-        const dateSpan = document.createElement("time");
-        dateSpan.className = "text-sm text-gray-500 dark:text-gray-400 select-text";
-        dateSpan.id = `${clockId}-date`;
-
-        const timeSpan = document.createElement("time");
-        timeSpan.className = "text-xl font-mono font-semibold select-text";
-        timeSpan.id = `${clockId}-time`;
-
-        middleDiv.appendChild(dateSpan);
-        middleDiv.appendChild(timeSpan);
-
-        // Right: Remove button
-        const removeBtn = document.createElement("button");
-        removeBtn.className =
-          "text-red-500 hover:text-red-700 dark:hover:text-red-400 transition p-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500";
-        removeBtn.setAttribute("aria-label", `Remove ${city.name} from clocks`);
-        removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-        removeBtn.addEventListener("click", () => {
-          clocks.splice(index, 1);
-          saveClocks();
-          renderClocks();
-        });
-
-        container.appendChild(leftDiv);
-        container.appendChild(middleDiv);
-        container.appendChild(removeBtn);
-
-        // Drag and drop handlers for reordering
-        container.addEventListener("dragstart", (e) => {
-          e.dataTransfer.setData("text/plain", index);
-          e.dataTransfer.effectAllowed = "move";
-          container.classList.add("opacity-50");
-        });
-        container.addEventListener("dragend", () => {
-          container.classList.remove("opacity-50");
-        });
-        container.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = "move";
-          container.classList.add("ring-2", "ring-blue-500");
-        });
-        container.addEventListener("dragleave", () => {
-          container.classList.remove("ring-2", "ring-blue-500");
-        });
-        container.addEventListener("drop", (e) => {
-          e.preventDefault();
-          container.classList.remove("ring-2", "ring-blue-500");
-          const draggedIndex = Number(e.dataTransfer.getData("text/plain"));
-          if (draggedIndex === index) return;
-          const draggedItem = clocks[draggedIndex];
-          clocks.splice(draggedIndex, 1);
-          clocks.splice(index, 0, draggedItem);
-          saveClocks();
-          renderClocks();
-        });
-
-        clocksList.appendChild(container);
-      });
-    }
-
-    // Save clocks to localStorage
-    function saveClocks() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clocks));
-    }
-
-    // Update all clocks every second
-    function updateClocks() {
-      const now = new Date();
-      clocks.forEach((city, index) => {
-        const { dateStr, timeStr } = formatDateTime(now, city.timezone, timeFormat === "24");
-        const dateElem = document.getElementById(`clock-${index}-date`);
-        const timeElem = document.getElementById(`clock-${index}-time`);
-        if (dateElem) dateElem.textContent = dateStr;
-        if (timeElem) timeElem.textContent = timeStr;
-      });
-    }
-
-    // Search functionality
-    function searchCities(query) {
-      if (!query) return [];
-      const lowerQuery = query.toLowerCase();
-      return cities.filter((city) => city.name.toLowerCase().includes(lowerQuery));
-    }
-
-    // Render search results
-    function renderSearchResults(results) {
-      searchResults.innerHTML = "";
-      if (results.length === 0) {
-        const li = document.createElement("li");
-        li.className = "p-2 text-gray-500 dark:text-gray-400 select-none";
-        li.textContent = "No results found";
-        searchResults.appendChild(li);
-        return;
-      }
-      results.forEach((city, i) => {
-        const li = document.createElement("li");
-        li.className =
-          "p-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-700 rounded flex items-center space-x-2";
-        li.setAttribute("role", "option");
-        li.setAttribute("id", `search-result-${i}`);
-
-        const flagSpan = document.createElement("span");
-        flagSpan.className = "text-2xl select-text";
-        flagSpan.textContent = city.flag;
-
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "select-text truncate";
-        nameSpan.textContent = city.name;
-
-        li.appendChild(flagSpan);
-        li.appendChild(nameSpan);
-
-        li.addEventListener("click", () => {
-          addCityToClocks(city);
-          clearSearch();
-          searchInput.focus();
-        });
-
-        searchResults.appendChild(li);
-      });
-    }
-
-    // Clear search input and results
-    function clearSearch() {
-      searchInput.value = "";
-      searchResults.innerHTML = "";
-      searchResults.classList.add("hidden");
-      searchInput.setAttribute("aria-expanded", "false");
-    }
-
-    // Add city to clocks if not already added
-    function addCityToClocks(city) {
-      if (clocks.some((c) => c.timezone === city.timezone)) {
-        alert(`${city.name} is already in your clocks.`);
-        return;
-      }
-      clocks.push(city);
-      saveClocks();
-      renderClocks();
-    }
-
-    // Handle search input changes with debounce
-    const handleSearchInput = debounce(() => {
-      const query = searchInput.value.trim();
-      if (query.length === 0) {
-        searchResults.classList.add("hidden");
-        searchInput.setAttribute("aria-expanded", "false");
-        return;
-      }
-      const results = searchCities(query);
-      renderSearchResults(results);
-      searchResults.classList.remove("hidden");
-      searchInput.setAttribute("aria-expanded", "true");
-    }, 250);
-
-    searchInput.addEventListener("input", handleSearchInput);
-
-    // Close search results on outside click
-    document.addEventListener("click", (e) => {
-      if (!searchResults.contains(e.target) && e.target !== searchInput) {
-        searchResults.classList.add("hidden");
-        searchInput.setAttribute("aria-expanded", "false");
-      }
-    });
-
-    // Keyboard navigation for search results
-    let focusedIndex = -1;
-    searchInput.addEventListener("keydown", (e) => {
-      const items = searchResults.querySelectorAll("li[role='option']");
-      if (searchResults.classList.contains("hidden") || items.length === 0) return;
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        focusedIndex = (focusedIndex + 1) % items.length;
-        items.forEach((item, i) => {
-          if (i === focusedIndex) {
-            item.classList.add("bg-blue-200", "dark:bg-blue-600");
-            item.scrollIntoView({ block: "nearest" });
-            item.setAttribute("aria-selected", "true");
-          } else {
-            item.classList.remove("bg-blue-200", "dark:bg-blue-600");
-            item.setAttribute("aria-selected", "false");
-          }
-        });
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        focusedIndex = (focusedIndex - 1 + items.length) % items.length;
-        items.forEach((item, i) => {
-          if (i === focusedIndex) {
-            item.classList.add("bg-blue-200", "dark:bg-blue-600");
-            item.scrollIntoView({ block: "nearest" });
-            item.setAttribute("aria-selected", "true");
-          } else {
-            item.classList.remove("bg-blue-200", "dark:bg-blue-600");
-            item.setAttribute("aria-selected", "false");
-          }
-        });
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        if (focusedIndex >= 0 && focusedIndex < items.length) {
-          items[focusedIndex].click();
-          focusedIndex = -1;
+      // Update displays
+      function updateDisplay() {
+        if (expression === '') {
+          display.textContent = '0';
+          subDisplay.textContent = '';
+        } else {
+          subDisplay.textContent = sanitizeForDisplay(expression);
+          display.textContent = expression;
         }
-      } else if (e.key === "Escape") {
-        clearSearch();
-        focusedIndex = -1;
       }
-    });
 
-    // Handle time format change
-    timeFormatSelect.addEventListener("change", () => {
-      timeFormat = timeFormatSelect.value;
-      localStorage.setItem(FORMAT_KEY, timeFormat);
-      updateClocks();
-    });
+      // Append value to expression
+      function appendToExpression(value) {
+        if (expression === '0' && /[0-9]/.test(value)) {
+          expression = value;
+        } else {
+          expression += value;
+        }
+        updateDisplay();
+      }
 
-    // Initial render
-    renderClocks();
-    updateClocks();
-    setInterval(updateClocks, 1000);
+      // Remove last character
+      function backspace() {
+        if (expression.length > 0) {
+          expression = expression.slice(0, -1);
+          updateDisplay();
+        }
+      }
+
+      // Clear all
+      function clearAll() {
+        expression = '';
+        updateDisplay();
+      }
+
+      // Clear entry (last number or function)
+      function clearEntry() {
+        if (expression.length === 0) return;
+        // Remove last number or function
+        // Regex to remove last number, decimal, or function call
+        const regex = /(\d+\.?\d*|\.\d+|[a-z]+\(|\)|\^|[+\-*/])$/i;
+        expression = expression.replace(regex, '');
+        updateDisplay();
+      }
+
+      // Memory functions
+      function memoryRecall() {
+        if (memory !== null) {
+          appendToExpression(memory.toString());
+        }
+      }
+      function memoryClear() {
+        memory = 0;
+      }
+      function memoryAdd() {
+        if (lastResult !== null) {
+          memory += lastResult;
+        }
+      }
+
+      // Evaluate expression safely
+      function evaluateExpression(expr) {
+        // Replace constants
+        let safeExpr = expr
+          .replace(/pi/g, 'Math.PI')
+          .replace(/π/g, 'Math.PI')
+          .replace(/e/g, 'Math.E')
+          .replace(/÷/g, '/')
+          .replace(/×/g, '*')
+          .replace(/\^/g, '**');
+
+        // Replace functions with Math equivalents
+        // Supported functions: sin, cos, tan, log10, ln, sqrt, abs
+        safeExpr = safeExpr
+          .replace(/sin\(/g, 'Math.sin(')
+          .replace(/cos\(/g, 'Math.cos(')
+          .replace(/tan\(/g, 'Math.tan(')
+          .replace(/log10\(/g, 'Math.log10(')
+          .replace(/ln\(/g, 'Math.log(')
+          .replace(/sqrt\(/g, 'Math.sqrt(')
+          .replace(/abs\(/g, 'Math.abs(');
+
+        // Prevent unsafe characters
+        if (/[^-()\d/*+.eE MathsincoagtlqrabsPIlnt0]/.test(safeExpr)) {
+          throw new Error('Invalid characters in expression');
+        }
+
+        // Evaluate with Function constructor
+        // eslint-disable-next-line no-new-func
+        const func = new Function(`return ${safeExpr}`);
+        return func();
+      }
+
+      // Add to history
+      function addHistory(expr, result) {
+        const li = document.createElement('li');
+        li.className =
+          'flex justify-between bg-white rounded-md px-3 py-1 shadow-sm hover:bg-indigo-50 cursor-pointer select-text';
+        li.tabIndex = 0;
+        li.setAttribute('role', 'button');
+        li.setAttribute('aria-label', `Expression: ${expr}, Result: ${result}. Click to reuse result.`);
+        li.textContent = `${sanitizeForDisplay(expr)} = ${result}`;
+        li.addEventListener('click', () => {
+          expression = result.toString();
+          updateDisplay();
+          display.focus();
+        });
+        historyList.prepend(li);
+      }
+
+      // Button click handler
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-action');
+          const value = btn.getAttribute('data-value');
+
+          switch (action) {
+            case 'number':
+            case 'decimal':
+            case 'operator':
+            case 'parenthesis':
+            case 'function':
+              appendToExpression(value);
+              break;
+          }
+        });
+      });
+
+      // Clear all
+      clearBtn.addEventListener('click', () => {
+        clearAll();
+      });
+
+      // Clear entry
+      clearEntryBtn.addEventListener('click', () => {
+        clearEntry();
+      });
+
+      // Backspace
+      backspaceBtn.addEventListener('click', () => {
+        backspace();
+      });
+
+      // Memory functions
+      memoryRecallBtn.addEventListener('click', () => {
+        memoryRecall();
+      });
+      memoryClearBtn.addEventListener('click', () => {
+        memoryClear();
+      });
+      memoryAddBtn.addEventListener('click', () => {
+        memoryAdd();
+      });
+
+      // Equals
+      equalsBtn.addEventListener('click', () => {
+        if (expression.trim() === '') return;
+        try {
+          const result = evaluateExpression(expression);
+          if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
+            addHistory(expression, result);
+            lastResult = result;
+            expression = result.toString();
+            updateDisplay();
+          } else {
+            display.textContent = 'Error';
+            subDisplay.textContent = '';
+            expression = '';
+          }
+        } catch (e) {
+          display.textContent = 'Error';
+          subDisplay.textContent = '';
+          expression = '';
+        }
+      });
+
+      // Keyboard support
+      window.addEventListener('keydown', (e) => {
+        if (
+          (e.key >= '0' && e.key <= '9') ||
+          e.key === '.' ||
+          e.key === '+' ||
+          e.key === '-' ||
+          e.key === '*' ||
+          e.key === '/' ||
+          e.key === '^' ||
+          e.key === '(' ||
+          e.key === ')'
+        ) {
+          e.preventDefault();
+          appendToExpression(e.key);
+        } else if (e.key === 'Enter' || e.key === '=') {
+          e.preventDefault();
+          equalsBtn.click();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          backspace();
+        } else if (e.key.toLowerCase() === 'c' && e.ctrlKey) {
+          e.preventDefault();
+          clearAll();
+        }
+      });
+
+      // Initialize display
+      updateDisplay();
+    })();
   </script>
-</body>
-</html>
+ </body>
+  </html>
+  
